@@ -38,4 +38,10 @@ Generate simulated data that meets the parallel trends assumption
 \examples{
 Beta = generate_parameters(Tt=2)
 df = generate_data(100, 2, Beta)
+
 }
+\seealso{
+Other simulation functions: 
+\code{\link{generate_parameters}()}
+}
+\concept{simulation functions}

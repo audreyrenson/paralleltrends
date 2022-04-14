@@ -49,4 +49,10 @@ Pick parameter values for simulation, from a normal distribution
 }
 \examples{
 generate_parameters(Tt=2)
+
 }
+\seealso{
+Other simulation functions: 
+\code{\link{generate_data}()}
+}
+\concept{simulation functions}

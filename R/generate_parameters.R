@@ -18,6 +18,8 @@
 #'
 #' @examples
 #' generate_parameters(Tt=2)
+#'
+#' @family simulation functions
 generate_parameters <- function(Tt,
                                 mu_Beta_W1=0.2, mu_Beta_W2=0.2, mu_Beta_A=0.2, mu_Beta_Y=0.2,
                                 sd_Beta_W1=0.2, sd_Beta_W2=0.2, sd_Beta_A=0.2, sd_Beta_Y=0.2,

@@ -15,6 +15,8 @@
 #' @examples
 #' Beta = generate_parameters(Tt=2)
 #' df = generate_data(100, 2, Beta)
+#'
+#' @family simulation functions
 generate_data <- function(N,
                           Tt,
                           Beta,
