@@ -42,7 +42,7 @@ generate_parameters(
 \item{Beta_YU}{numeric. constant coefficient for effect of unmeasured, time-invariant, binary covariate U in Y models}
 }
 \value{
-
+list of matrices, one for each variable to be generated (U, W1, W2, A, Y). Each matrix has T+1 rows and a different number of columns corresponding to the coefficients of a (generalized) linear model. The columns names refer to the term in that model.
 }
 \description{
 Pick parameter values for simulation, from a normal distribution
