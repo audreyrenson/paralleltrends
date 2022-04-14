@@ -4,6 +4,8 @@
 # paralleltrends
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/audreyrenson/paralleltrends/workflows/R-CMD-check/badge.svg)](https://github.com/audreyrenson/paralleltrends/actions)
 <!-- badges: end -->
 
 This package implements the estimators described in the paper titled
