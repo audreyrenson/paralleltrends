@@ -50,6 +50,8 @@ ice(
 \item{models}{lgl. Return all models as an attribute?}
 
 \item{long}{lgl. Is df_obs wide (\code{FALSE}, default) or long (\code{TRUE}) format?}
+
+\item{suppress_rank_warnings}{lgl. Rank deficient models are often expected in this setting. Option to turn off warning 'prediction from a rank-deficient fit may be misleading'}
 }
 \value{
 

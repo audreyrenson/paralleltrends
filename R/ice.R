@@ -14,6 +14,7 @@
 #' @param tibble logical. return results as a tibble (TRUE) or vector (FALSE)?
 #' @param models lgl. Return all models as an attribute?
 #' @param long lgl. Is df_obs wide (`FALSE`, default) or long (`TRUE`) format?
+#' @param suppress_rank_warnings lgl. Rank deficient models are often expected in this setting. Option to turn off warning 'prediction from a rank-deficient fit may be misleading'
 #'
 #'
 #' @return

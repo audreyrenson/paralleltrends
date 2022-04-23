@@ -21,9 +21,9 @@ test_that("ice wide and long return same result", {
   df_long = pivot_longer_gendata(df_wide) %>%
     dplyr::mutate(W22=W2^2) %>%
     dplyr::group_by(uid) %>%
-    didgformula::append_lags(3, c('A','W1','W2','W22', 'Y'), default=NA) %>%
+    append_lags(3, c('A','W1','W2','W22', 'Y'), default=NA) %>%
     dplyr::ungroup() %>%
-    didgformula::make_time_dummies('t')
+    make_time_dummies('t')
 
   ice_long = ice(df_long,
                  df_interv = df_long %>% dplyr::mutate(dplyr::across(dplyr::starts_with('A'), ~0)),

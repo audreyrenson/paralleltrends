@@ -24,5 +24,9 @@ Imports:
     dplyr,
     glue,
     magrittr,
+    matrixStats,
+    rlang,
     stats,
+    stringr,
+    tibble,
     tidyr

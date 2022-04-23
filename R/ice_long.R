@@ -75,7 +75,7 @@ recursive_ice_long <- function(Tt,
                                         family=inside_family)
 
     preds_n = sapply(X = two_models,
-                     FUN = if(suppress_rank_warnings) safe_predict else predict,
+                     FUN = if(suppress_rank_warnings) safe_predict else stats::predict,
                      newdata = df_interv,
                      type = 'response',
                      simplify = TRUE)
@@ -86,7 +86,7 @@ recursive_ice_long <- function(Tt,
         preds_n[, s] = tmle_update(preds_n[, s],
                                    y = df_obs$Y,
                                    w = df_obs[[glue::glue(weights)]],
-                                   family=gaussian,
+                                   family='gaussian',
                                    subset=df_obs$A==0)
       }
     }
@@ -119,7 +119,7 @@ recursive_ice_long <- function(Tt,
 
     preds_n = preds_nmin1 #carry outward for observations where t < n_nested
     preds_n[obs_keep, ] = sapply(X = two_models,
-                                 FUN = if(suppress_rank_warnings) safe_predict else predict,
+                                 FUN = if(suppress_rank_warnings) safe_predict else stats::predict,
                                  newdata=df_interv[obs_keep, ], simplify=TRUE)
 
     if(tmle) {
@@ -127,7 +127,7 @@ recursive_ice_long <- function(Tt,
         preds_n[obs_keep, s] = tmle_update(preds  = preds_n[obs_keep, s, drop=TRUE],
                                            y      = preds_nmin1[obs_keep, s, drop=TRUE],
                                            w      = df_obs[obs_keep, glue::glue(weights), drop=TRUE],
-                                           family = gaussian,
+                                           family = 'gaussian',
                                            subset = df_obs[obs_keep, glue::glue('A_lag{n}')]==0)
       }
     }
@@ -145,8 +145,8 @@ recursive_ice_long <- function(Tt,
 
 
 fit_inner_models_long <- function(df_obs, formula_t, formula_tmin1, family) {
-  list(tmin1 = glm(formula_tmin1, family, df_obs),
-       t     = glm(formula_t,     family, df_obs))
+  list(tmin1 = stats::glm(formula_tmin1, family, df_obs),
+       t     = stats::glm(formula_t,     family, df_obs))
 
 }
 
@@ -155,19 +155,22 @@ fit_outer_model_long <- function(n_nested, df_obs, preds, formula_n, binomial_n=
 ) {
 
   if(is.null(binomial_n)) {
-    df_obs$lm_weights = 1 #these are 1's unless binomial aggregate data
+    lm_weights = 1 #these are 1's unless binomial aggregate data
   } else {
-    df_obs$lm_weights = binomial_n / sum(binomial_n)
+    lm_weights = binomial_n / sum(binomial_n)
   }
 
   df_obs$preds = preds
-
+  df_obs$lm_weights = lm_weights
+  df_obs$obs_keep = obs_keep
   return (
-    lm( formula = formula_n,
-        data=df_obs[obs_keep, ],
-        weights = lm_weights)
+    stats::lm( formula = formula_n,
+               data=df_obs,
+               weights = lm_weights,
+               subset = obs_keep)
   )
 }
+#' @importFrom rlang .data
 estimate_ice_long <- function(ice_preds, #(NxTt)x2 matrix
                          t_col, #(NxTt)x1 vector indicating which times the ice_preds correspond to
                          link_fun = NULL,
@@ -181,8 +184,9 @@ estimate_ice_long <- function(ice_preds, #(NxTt)x2 matrix
   freq_w = binomial_n / sum(binomial_n)
 
   df = tibble::tibble(t = t_col, ice_t = ice_preds[,2], ice_s = ice_preds[,1], freq_w=freq_w) %>%
-    dplyr::group_by(t) %>%
-    dplyr::summarise(estimate = link_fun(sum(ice_t * freq_w) / sum(freq_w)) - link_fun(sum(ice_s * freq_w) / sum(freq_w)))
+    dplyr::group_by(.data[['t']]) %>%
+    dplyr::summarise(estimate = link_fun(sum(.data[['ice_t']] * .data[['freq_w']]) / sum(.data[['freq_w']])) -
+                       link_fun(sum(.data[['ice_s']] * .data[['freq_w']]) / sum(.data[['freq_w']])))
 
   return ( df$estimate )
 }

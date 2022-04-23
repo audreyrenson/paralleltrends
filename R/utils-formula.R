@@ -29,7 +29,7 @@ glue_formula = function(string, ...) {
 
   positive_glued_trimmed_string = remove_negatives(glued_trimmed_string)
 
-  return(as.formula(positive_glued_trimmed_string))
+  return(stats::as.formula(positive_glued_trimmed_string))
 }
 
 
@@ -67,7 +67,7 @@ expand_formula <- function(formula, ...) {
     }
   }
 
-  all_terms = attr(terms.formula(formula), 'term.labels')
+  all_terms = attr(stats::terms.formula(formula), 'term.labels')
   formula_string = paste(stringr::str_replace_all(all_terms, '[a-z]', term_maker), collapse=" + ")
   return ( as.character(glue::glue( formula_string, .envir = ... )) )
 }
