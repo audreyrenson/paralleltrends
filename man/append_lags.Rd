@@ -4,7 +4,7 @@
 \alias{append_lags}
 \title{Append n lags of a group of variables to a dataset}
 \usage{
-append_lags(data, n_lags, lag_vars, default = 0)
+append_lags(data, n_lags, lag_vars, default = NA)
 }
 \arguments{
 \item{data}{data frame}
@@ -20,4 +20,10 @@ The original data frame with additional columns \code{x_lag1},\code{x_lag2},...,
 }
 \description{
 Append n lags of a group of variables to a dataset
+}
+\examples{
+expand.grid(id=1:5, tt=1:3) \%>\%
+   dplyr::mutate(x=rnorm(15)) \%>\%
+   dplyr::group_by(id) \%>\%
+   append_lags(n_lags = 2, lag_vars='x')
 }

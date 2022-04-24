@@ -9,7 +9,11 @@
 #' @export
 #'
 #' @examples
-append_lags = function(data, n_lags, lag_vars, default=0) { #perhaps add this to the package??
+#' expand.grid(id=1:5, tt=1:3) %>%
+#'    dplyr::mutate(x=rnorm(15)) %>%
+#'    dplyr::group_by(id) %>%
+#'    append_lags(n_lags = 2, lag_vars='x')
+append_lags = function(data, n_lags, lag_vars, default=NA) {
   for(n in 1:n_lags)
     for(lag_var in lag_vars)
       #this uses mutate because you can't take advantage of dplyr's groups otherwise
