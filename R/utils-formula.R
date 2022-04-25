@@ -5,7 +5,7 @@
 #' @param string chr. Expressions enclosed in braces will be evaluated as R code (see `?glue`).
 #' @param ... additional arguments. Here you can pass variables to be evaluated in enclosed expressions in `string`.
 #'
-#' @return
+#' @return formula.
 #' @export
 #'
 #' @examples

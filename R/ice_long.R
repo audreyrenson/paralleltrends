@@ -82,12 +82,16 @@ recursive_ice_long <- function(Tt,
 
     if(tmle) {
       if(is.null(weights)) stop("Must specify weights if tmle==TRUE")
+
+      outcome_variables = sapply(c('t'=inside_formula_t, 'tmin1'=inside_formula_tmin1),
+                                 function(f) as.character(stats::terms(stats::as.formula(glue::glue(f)))[[2]]))
+
       for(s in c('tmin1','t')) {
-        preds_n[, s] = tmle_update(preds_n[, s],
-                                   y = df_obs$Y,
-                                   w = df_obs[[glue::glue(weights)]],
-                                   family='gaussian',
-                                   subset=df_obs$A==0)
+        preds_n[, s] = tmle_update_long(preds_n[, s],
+                                        y = df_obs[[outcome_variables[s]]],
+                                        w = weights,
+                                        df_tvars = df_obs[attr(df_obs, 'timevars')],
+                                        family='gaussian')
       }
     }
 
@@ -124,11 +128,11 @@ recursive_ice_long <- function(Tt,
 
     if(tmle) {
       for(s in c('tmin1', 't')) {
-        preds_n[obs_keep, s] = tmle_update(preds  = preds_n[obs_keep, s, drop=TRUE],
-                                           y      = preds_nmin1[obs_keep, s, drop=TRUE],
-                                           w      = df_obs[obs_keep, glue::glue(weights), drop=TRUE],
-                                           family = 'gaussian',
-                                           subset = df_obs[obs_keep, glue::glue('A_lag{n}')]==0)
+        preds_n[obs_keep, s] = tmle_update_long(preds  = preds_n[obs_keep, s, drop=TRUE],
+                                                y      = preds_nmin1[obs_keep, s, drop=TRUE],
+                                                w      = weights[obs_keep],
+                                                df_tvars = df_obs[obs_keep, attr(df_obs, 'timevars')[-1:-(n_nested+1)]],
+                                                family = 'gaussian')
       }
     }
 

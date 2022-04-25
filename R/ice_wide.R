@@ -94,16 +94,14 @@ recursive_ice_wide <- function(t, k, df_obs, df_interv, inside_formula_t, inside
 
     if(tmle) {### BOOKMARK 4.21.22. Should be last step to making tmle_pipeline_wide() work - make variable labels more general and use df_interv to find subset.
       if(is.null(weights)) stop('must supply weights if tmle=TRUE')
-      preds_k[,1] = tmle_update(preds_k[,1],
-                                y=df_obs[[glue::glue('Y{t-1}')]],
-                                w=weights[,k+1],
-                                subset = df_obs[[glue::glue('A{t}')]]==0, #will need to change this re: df_interv
-                                family=inside_family)
-      preds_k[,2] = tmle_update(preds_k[,2],
-                                y=df_obs[[glue::glue('Y{t}')]],
-                                w=weights[,k+1],
-                                subset = df_obs[[glue::glue('A{t}')]]==0, #ditto
-                                family=inside_family)
+      preds_k[,1] = tmle_update_wide(preds_k[,1],
+                                     y=df_obs[[glue::glue('Y{t-1}')]],
+                                     w=weights[,k+1],
+                                     family=inside_family)
+      preds_k[,2] = tmle_update_wide(preds_k[,2],
+                                     y=df_obs[[glue::glue('Y{t}')]],
+                                     w=weights[,k+1],
+                                     family=inside_family)
     }
 
     if(models)  attr(preds_k, 'models') = list(two_models)
@@ -133,16 +131,14 @@ recursive_ice_wide <- function(t, k, df_obs, df_interv, inside_formula_t, inside
                      simplify=TRUE)
 
     if(tmle) {
-      preds_k[,1] = tmle_update(preds_k[,1],
-                                y=preds_kplus1[,1],
-                                w=weights[,k+1],
-                                subset = df_obs[[glue::glue('A{k}')]]==0,
-                                family=inside_family)
-      preds_k[,2] = tmle_update(preds_k[,2],
-                                y=preds_kplus1[,2],
-                                w=weights[,k+1],
-                                subset = df_obs[[glue::glue('A{k}')]]==0,
-                                family=inside_family)
+      preds_k[,1] = tmle_update_wide(preds_k[,1],
+                                     y=preds_kplus1[,1],
+                                     w=weights[,k+1],
+                                     family=inside_family)
+      preds_k[,2] = tmle_update_wide(preds_k[,2],
+                                     y=preds_kplus1[,2],
+                                     w=weights[,k+1],
+                                     family=inside_family)
     }
 
 
