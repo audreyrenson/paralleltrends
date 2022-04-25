@@ -74,7 +74,7 @@ generate_data <- function(N,
 pivot_longer_gendata = function(df_wide) {
   df_wide %>%
     tidyr::pivot_longer(c(dplyr::starts_with('A'), dplyr::starts_with("W"), dplyr::starts_with('Y'))) %>%
-    tidyr::separate(3, into=c('var','t'), sep=-1) %>%
+    tidyr::separate(.data[['name']], into=c('var','t'), sep=-1) %>%
     tidyr::pivot_wider(names_from = 'var', values_from = 'value') %>%
     dplyr::mutate(t=as.numeric(t))
 }
