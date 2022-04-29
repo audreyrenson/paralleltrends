@@ -63,8 +63,10 @@ recursive_ice_long <- function(Tt,
 
   ### Adding convenience variables, so that users can reference
   ### {tvars} and {n} in formulas.
-  tvars = attr(df_obs, 'timevars')
-  tvars = paste0('(', paste( tvars[max(1, n_nested) : length(tvars)] , collapse='+'), ')') #this is like (t{n} + t{n+1} + ... + t{Tt}) for referencing formulas
+  if(!is.null(attr(df_obs, 'timevars'))) {
+    tvars = attr(df_obs, 'timevars')
+    tvars = paste0('(', paste( tvars[max(1, n_nested) : length(tvars)] , collapse='+'), ')') #this is like (t{n} + t{n+1} + ... + t{Tt}) for referencing formulas
+  }
   n = n_nested #for convenience, allow user to specify formulas with x{n} where {n} is shorthand for {n_nested}
 
   if(n_nested == 0) {
